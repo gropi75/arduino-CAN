@@ -3,7 +3,7 @@
 
 #ifdef ARDUINO_ARCH_ESP32
 
-#include "esp_intr.h"
+#include "esp_intr_alloc.h"
 #include "soc/dport_reg.h"
 #include "driver/gpio.h"
 
@@ -121,7 +121,11 @@ int ESP32SJA1000Class::begin(long baudRate)
   }
 
   modifyRegister(REG_BTR1, 0x80, 0x80); // SAM = 1
-  writeRegister(REG_IER, 0xff); // enable all interrupts
+  // modified !!!!!!!
+  //writeRegister(REG_IER, 0xff); // enable all interrupts
+  //enable all interrupts (BUT NOT BIT 4 which has turned into a baud rate scalar!) 
+  
+  writeRegister(REG_IER, 0xEF);
 
   // set filter to allow anything
   writeRegister(REG_ACRn(0), 0x00);
